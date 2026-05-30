@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redinnova - Soluciones Tecnológicas Innovadoras</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- HEADER MEJORADO -->
+    <header class="header-pro">
+        <nav class="navbar-pro">
+            <div class="nav-container">
+                <div class="logo-pro">
+                    <i class="fas fa-rocket"></i>
+                    <span>Redinnova</span>
+                </div>
+                
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-links-pro" id="navLinks">
+                    <li><a href="#home" onclick="scrollToSection('home')">Inicio</a></li>
+                    <li><a href="#products" onclick="scrollToSection('products')">Productos</a></li>
+                    <li><a href="#services" onclick="scrollToSection('services')">Servicios</a></li>
+                    <li><a href="#modules" onclick="scrollToSection('modules')">Módulos</a></li>
+                    <li><a href="#contact" onclick="scrollToSection('contact')">Contacto</a></li>
+                </ul>
+
+                <div class="header-icons">
+                    <div class="cart-icon-header" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    <div class="user-icon-header" onclick="toggleUserMenu()" style="cursor: pointer; margin-left: 1rem;">
+                        <i class="fas fa-user-circle" style="font-size: 1.5rem; color: #00bcd4;"></i>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MENÚ DE USUARIO -->
+    <div class="user-menu" id="userMenu" style="display: none; position: absolute; top: 60px; right: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; min-width: 200px;">
+        <div id="userMenuContent" style="padding: 1rem;">
+            <!-- Este contenido se actualiza dinámicamente -->
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN SEGURO -->
+    <div id="loginModal" style="
+        display: none !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    ">
+        <div class="login-box" style="
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        ">
+            <!-- BOTÓN CERRAR -->
+            <button onclick="cerrarLoginSeguro()" style="
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                cursor: pointer;
+                font-size: 24px;
+                color: #999;
+                font-weight: bold;
+                background: none;
+                border: none;
+                padding: 0;
+                width: 30px;
+                height: 30px;
+            ">✕</button>
+
+            <!-- PASO 1: CREDENCIALES -->
+            <div id="loginStep1" style="display: block;">
+                <h2 style="color: #1a1a1a; margin-bottom: 1.5rem; text-align: center; margin-top: 0;">
+                    <i class="fas fa-lock"></i> Iniciar Sesión
+                </h2>
+                
+                <div id="loginError" style="display: none;"></div>
+
+                <form id="formLogin" onsubmit="procesarLoginSeguroPaso1(); return false;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600;">Email o Usuario</label>
+                        <input type="text" id="loginUsuario" placeholder="admin" required style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600;">Contraseña</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; padding: 0.8rem; background: #00bcd4; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.3s;">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+
+                <p style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.85rem;">
+                    <strong>Usuarios de prueba:</strong><br>
+                    admin / Admin@2026
+                </p>
+            </div>
+
+            <!-- PASO 2: VERIFICACIÓN 2FA -->
+            <div id="loginStep2FA" style="display: none;">
+                <h2 style="color: #1a1a1a; margin-bottom: 1.5rem; text-align: center; margin-top: 0;">
+                    <i class="fas fa-shield-alt"></i> Verificación 2FA
+                </h2>
+                
+                <div id="loginError2FA" style="display: none;"></div>
+
+                <form id="form2FA" onsubmit="procesarLoginSeguroPaso2FA(); return false;">
+                    <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 1rem; margin-bottom: 1.5rem; border-radius: 6px;">
+                        <p style="margin: 0; color: #1565c0; font-size: 0.9rem;">
+                            📧 Se envió un código a tu email. Ingrésalo abajo.
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600;">Código 2FA (6 dígitos)</label>
+                        <input type="text" id="codigo2FA" placeholder="000000" maxlength="6" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1.2rem; text-align: center; letter-spacing: 0.2em; box-sizing: border-box;">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem; text-align: center; color: #999; font-size: 0.9rem;">
+                        O usa una clave de recuperación:
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600;">Clave de Recuperación</label>
+                        <input type="text" id="claveRecuperacion" placeholder="XXXXXXXX" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; padding: 0.8rem; background: #4caf50; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.3s;">
+                        <i class="fas fa-check"></i> Verificar
+                    </button>
+                </form>
+
+                <button type="button" onclick="cerrarLoginSeguro()" style="width: 100%; padding: 0.8rem; margin-top: 1rem; background: #f5f5f5; color: #666; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+                
+    <!-- HERO CON FONDO TECH -->
+    <section class="hero" id="home">
+        <div class="tech-background"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Redinnova</h1>
+            <p class="hero-subtitle">Soluciones tecnológicas que transforman tu negocio</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>500+</h3>
+                    <p>Clientes</p>
+                </div>
+                <div class="stat">
+                    <h3>10+</h3>
+                    <p>Años</p>
+                </div>
+                <div class="stat">
+                    <h3>24/7</h3>
+                    <p>Soporte</p>
+                </div>
+            </div>
+            <a href="#products" class="cta-button">
+                <i class="fas fa-arrow-right"></i> Explorar Productos
+            </a>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nuestros Productos</h2>
+                <p class="section-subtitle">Catálogo completo de soluciones tecnológicas</p>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterProducts('all')">
+                    <i class="fas fa-th"></i> Todos
+                </button>
+                <button class="filter-btn" onclick="filterProducts('computadoras')">
+                    <i class="fas fa-desktop"></i> Computadoras
+                </button>
+                <button class="filter-btn" onclick="filterProducts('laptops')">
+                    <i class="fas fa-laptop"></i> Laptops
+                </button>
+                <button class="filter-btn" onclick="filterProducts('perifericos')">
+                    <i class="fas fa-mouse"></i> Periféricos
+                </button>
+                <button class="filter-btn" onclick="filterProducts('software')">
+                    <i class="fas fa-cube"></i> Software
+                </button>
+            </div>
+
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN SERVICIOS -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nuestros Servicios</h2>
+                <p class="section-subtitle">Soluciones profesionales para tu negocio</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card" onclick="verificarAccesoYMostrar('servicio-tecnico', 'mostrarServicioTecnico')">
+                    <div class="service-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Servicio Técnico</h3>
+                    <p>Registra y consulta reparaciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULOS DE NEGOCIO -->
+    <section class="modules-section" id="modules">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Gestión de Negocio</h2>
+                <p class="section-subtitle">Módulos para administrar tu empresa</p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card" onclick="verificarAccesoYMostrar('ingreso-compras', 'showModule', 'ingreso-compras')">
+                    <div class="module-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h3>Ingreso de Compras</h3>
+                    <p>Registra todas tus compras</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('salida-ventas', 'showModule', 'salida-ventas')">
+                    <div class="module-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <h3>Salida de Ventas</h3>
+                    <p>Gestiona tus ventas</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('caja-diaria', 'showModule', 'caja-diaria')">
+                    <div class="module-icon">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <h3>Caja Diaria</h3>
+                    <p>Control de efectivo</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('ventas-personales', 'showModule', 'ventas-personales')">
+                    <div class="module-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Ventas Personales</h3>
+                    <p>Desempeño por vendedor</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('productos', 'showModule', 'productos')">
+                    <div class="module-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h3>Productos</h3>
+                    <p>Catálogo de inventario variado</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('devoluciones', 'showModule', 'devoluciones')">
+                    <div class="module-icon">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <h3>Devoluciones</h3>
+                    <p>Gestiona devoluciones de clientes</p>
+                </div>
+
+                <div class="module-card" onclick="verificarAccesoYMostrar('registro-diario', 'showDailyRegistry')">
+                    <div class="module-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Registro Diario</h3>
+                    <p>Ingreso y salida de empleados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL DE MÓDULOS -->
+    <div class="module-modal" id="moduleModal">
+        <div class="modal-overlay" onclick="closeModule()"></div>
+        <div class="modal-box-module">
+            <span class="close-modal" onclick="closeModule()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="modal-content-module" id="modalContent">
+                <!-- Contenido dinámico aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN EQUIPO DE EMPLEADOS -->
+    <section class="team-section" id="team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nuestro Equipo Profesional</h2>
+                <p class="section-subtitle">Especialistas listos para ayudarte</p>
+            </div>
+
+            <div class="team-grid" id="teamGrid">
+                <!-- Aquí se insertan los empleados dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL EMPLEADO -->
+    <div class="employee-modal" id="employeeModal">
+        <div class="modal-overlay" onclick="closeEmployeeModal()"></div>
+        <div class="modal-box-employee">
+            <span class="close-modal" onclick="closeEmployeeModal()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="modal-content-employee">
+                <div class="employee-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="employeeName" class="employee-modal-name">Nombre Empleado</h3>
+                <div class="employee-service">
+                    <i class="fas fa-briefcase"></i>
+                    <span id="employeeService">Servicio</span>
+                </div>
+                <div class="employee-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <p class="contact-label">Teléfono:</p>
+                            <p class="contact-value" id="employeePhone">+52 55 0000 0000</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <p class="contact-label">Email:</p>
+                            <p class="contact-value" id="employeeEmail">email@reinnova.com</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="call-btn" id="callBtn" onclick="callEmployee()">
+                    <i class="fas fa-phone"></i> Llamar Ahora
+                </button>
+                <button class="whatsapp-btn" id="whatsappBtn" onclick="whatsappEmployee()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTRO DE INGRESO Y SALIDA - TABLA GENERAL -->
+    <section class="daily-registry-section" id="dailyRegistry" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Registro Diario de Ingreso y Salida</h2>
+                <p class="section-subtitle">Horario de Ingreso y Salida - Redinnova</p>
+            </div>
+
+            <div class="registry-toolbar">
+                <div>
+                    <label for="registryDate">Selecciona Fecha:</label>
+                    <input type="date" id="registryDate">
+                    <button onclick="filterRegistryByDate()" class="btn-filter">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                    <button onclick="addNewDailyRegistry()" class="btn-add-employee-registry">
+                        <i class="fas fa-plus"></i> Agregar Empleado
+                    </button>
+                </div>
+                <div>
+                    <button onclick="exportDailyRegistry()" class="btn-export-registry">
+                        <i class="fas fa-download"></i> Descargar
+                    </button>
+                </div>
+            </div>
+
+            <div class="registry-table-wrapper">
+                <table class="daily-registry-table">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE Y APE</th>
+                            <th>SERVICIO</th>
+                            <th>FECHA</th>
+                            <th>H. INGRESO</th>
+                            <th>DETALLE DE AVANCE</th>
+                            <th>ALMUERZO SALIDA</th>
+                            <th>ALMUERZO INGRESO</th>
+                            <th>H.SALIDA</th>
+                            <th>OBSERVACIONES</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyRegistryBody">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL PARA REGISTRAR EMPLEADO EN LA TABLA DIARIA -->
+    <div class="daily-registry-modal" id="dailyRegistryModal">
+        <div class="modal-overlay" onclick="closeDailyRegistryModal()"></div>
+        <div class="modal-box-daily-registry">
+            <span class="close-modal" onclick="closeDailyRegistryModal()">
+                <i class="fas fa-times"></i>
+            </span>
+            <h3 id="dailyModalTitle">Registrar Ingreso y Salida</h3>
+            
+            <form id="dailyRegistryForm" onsubmit="saveDailyRegistry(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre Empleado:</label>
+                        <input type="text" id="dailyEmpName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Servicio:</label>
+                        <input type="text" id="dailyEmpService" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha: *</label>
+                        <input type="date" id="dailyFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Ingreso: *</label>
+                        <input type="time" id="dailyHoraIngreso" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Detalle de Avance: *</label>
+                    <textarea id="dailyDetalleAvance" rows="3" placeholder="Describe el trabajo realizado..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Almuerzo (Salida): *</label>
+                        <input type="time" id="dailyAlmuerzoSalida" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Almuerzo (Ingreso): *</label>
+                        <input type="time" id="dailyAlmuerzoIngreso" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Hora Salida: *</label>
+                        <input type="time" id="dailyHoraSalida" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones:</label>
+                    <textarea id="dailyObservaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-save-daily">
+                        <i class="fas fa-save"></i> Guardar Registro
+                    </button>
+                    <button type="button" class="btn-cancel-daily" onclick="closeDailyRegistryModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CARRITO MODAL -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-overlay" onclick="toggleCart()"></div>
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-cart"></i> Carrito de Compras</h3>
+                <span class="close-cart" onclick="toggleCart()">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+
+            <div class="cart-items-container" id="cartItems"></div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>S/<span id="cartSubtotal">0.00</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Impuestos (16%):</span>
+                    <span>S/<span id="cartTaxes">0.00</span></span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>S/<span id="cartTotal">0.00</span></span>
+                </div>
+            </div>
+
+            <button class="checkout-btn" onclick="checkout()">
+                <i class="fas fa-credit-card"></i> Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-pro" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-rocket"></i> Redinnova</h4>
+                    <p>Innovación tecnológica para tu futuro. Somos tus aliados en la transformación digital.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/p/Red-innova-sac-100064703783715/" target="_blank" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/redinnova_sac" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/redinnova" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://twitter.com/redinnova" target="_blank" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-phone"></i> +51 953 010 727</p>
+                    <p><i class="fas fa-envelope"></i> ventas@redinnovatec.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Centro de Lima, Lima Perú</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegación</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#products">Productos</a></li>
+                        <li><a href="#services">Servicios</a></li>
+                        <li><a href="#modules">Módulos</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Suscríbete para recibir noticias y ofertas</p>
+                    <form id="newsletterForm" onsubmit="suscribirNewsletter(event)" style="display: flex; gap: 0.5rem;">
+                        <input type="email" id="newsletterEmail" placeholder="Tu email" required style="flex: 1; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px;">
+                        <button type="submit" style="background: #00bcd4; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Reinnova. Todos los derechos reservados. | 
+                   <a href="/404.html">Política de Privacidad</a> | 
+                   <a href="/404.html">Términos de Servicio</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LIBRERÍAS PARA GENERACIÓN DE PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="pdf-download-styles.css">
+
+    <!-- ✅ CORRECTO -->
+<script src="auth.js"></script>              <!-- Login y usuario primero -->
+<script src="script.js"></script>            <!-- Empleados y módulos -->
+<script src="daily-registry.js"></script>    <!-- Registro diario con funciones necesarias -->
+<script src="pdf-download.js"></script>      <!-- PDF usa todo lo anterior -->
+<script src="devoluciones.js"></script>
+<script src="netlify-client.js"></script>
+
+    <!-- FUNCIÓN PARA PROTEGER MÓDULOS -->
+    <script>
+        function verificarAccesoYMostrar(moduleId, funcionMostrar, parametro = null) {
+            // Si no está autenticado, pedir login
+            if (!usuarioActualSeguro) {
+                mostrarNotificacionSegura('🔐 Debes iniciar sesión para acceder a este módulo');
+                abrirLoginSeguro();
+                return;
+            }
+
+            // Verificar permisos
+            const acceso = verificarAccesoSeguro(moduleId, usuarioActualSeguro);
+            if (!acceso.permitido) {
+                mostrarNotificacionSegura(`❌ ${acceso.motivo}`);
+                return;
+            }
+
+            // Si tiene acceso, mostrar el módulo
+            if (parametro) {
+                window[funcionMostrar](parametro);
+            } else {
+                window[funcionMostrar]();
+            }
+        }
+    </script>
+</body>
+</html>
+
