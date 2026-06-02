@@ -1,0 +1,11 @@
+.gitignore
+DEPLOYMENT.md
+COMPLETION-REPORT.txt
+INDEX.md
+README-2026.md
+app.js
+manifest.json
+service-worker.js
+style-2026.css
+variables-2026.css
+.htaccess
