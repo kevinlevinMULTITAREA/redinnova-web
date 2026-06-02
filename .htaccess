@@ -1,0 +1,149 @@
+# ==========================================
+# SEGURIDAD Y OPTIMIZACIÓN - .htaccess
+# ==========================================
+
+# Habilitar módulos necesarios
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+</IfModule>
+
+# ===== SEGURIDAD - HEADERS =====
+<IfModule mod_headers.c>
+  # Content Security Policy
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+  
+  # X-Content-Type-Options
+  Header set X-Content-Type-Options "nosniff"
+  
+  # X-Frame-Options
+  Header set X-Frame-Options "SAMEORIGIN"
+  
+  # X-XSS-Protection
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Referrer-Policy
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Feature-Policy / Permissions-Policy
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  
+  # Strict-Transport-Security (HTTPS)
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  
+  # Remove X-Powered-By
+  Header unset X-Powered-By
+  Header unset Server
+</IfModule>
+
+# ===== COMPRESIÓN GZIP =====
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-opentype image/svg+xml
+</IfModule>
+
+# ===== CACHE BROWSER =====
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # HTML - No cachear
+  ExpiresByType text/html "access 0 seconds"
+  
+  # CSS, JavaScript - 1 año
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  
+  # Imágenes - 1 año
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # Fuentes - 1 año
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+  
+  # JSON, XML - 1 hora
+  ExpiresByType application/json "access plus 1 hour"
+  ExpiresByType application/xml "access plus 1 hour"
+  
+  # Default
+  ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# ===== ETAG =====
+<IfModule mod_headers.c>
+  Header unset ETag
+</IfModule>
+FileETag None
+
+# ===== MOD_REWRITE - URL AMIGABLES =====
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.html [QSA,L]
+</IfModule>
+
+# ===== BLOQUEAR ACCESO A ARCHIVOS SENSIBLES =====
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|lock|md|yml|yaml|json)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# ===== PROTEGER DIRECTORIOS =====
+<IfModule mod_dir.c>
+  DirectoryIndex index.html
+</IfModule>
+
+<Directory ~ "^\/\.">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+# ===== OPTIMIZACIÓN - LAZY LOADING =====
+# Los navegadores modernos soportan loading="lazy" en HTML
+
+# ===== PERMITIR CORS PARA FUENTES =====
+<IfModule mod_headers.c>
+  <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font\.css|css)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+</IfModule>
+
+# ===== PREVENIR HOTLINKING DE IMÁGENES =====
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTP_REFERER} !^$
+  RewriteCond %{HTTP_REFERER} !^https?://(www\.)?redinnova\.com [NC]
+  RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|webp)$ [NC]
+  RewriteRule ^ - [F]
+</IfModule>
+
+# ===== BLOQUEAR BOTS MALICIOSOS =====
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTP_USER_AGENT} (bot|crawler|spider|scraper) [NC]
+  RewriteRule ^.*$ - [F]
+</IfModule>
+
+# ===== FORZAR HTTPS =====
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ===== REDIRIGIR WWW =====
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [L,R=301]
+</IfModule>

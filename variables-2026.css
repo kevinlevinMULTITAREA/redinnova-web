@@ -1,0 +1,143 @@
+/* ==========================================
+   SISTEMA DE DISEÑO MODERNO 2026
+   SaaS Design System - Stripe, Vercel, Notion Style
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* ===== TIPOGRAFÍA ===== */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Fira Code', 'Courier New', monospace;
+
+  /* ===== COLORES PRIMARIOS ===== */
+  --primary: #06b6d4;
+  --primary-dark: #0891b2;
+  --primary-light: #22d3ee;
+  --primary-lighter: #cffafe;
+
+  /* ===== COLORES SECUNDARIOS ===== */
+  --secondary: #8b5cf6;
+  --secondary-dark: #7c3aed;
+  --secondary-light: #a78bfa;
+
+  /* ===== COLORES DE ESTADO ===== */
+  --success: #22c55e;
+  --success-dark: #16a34a;
+  --success-light: #86efac;
+
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --danger-light: #fca5a5;
+
+  --warning: #f59e0b;
+  --warning-dark: #d97706;
+  --warning-light: #fcd34d;
+
+  --info: #3b82f6;
+  --info-dark: #1d4ed8;
+  --info-light: #93c5fd;
+
+  /* ===== FONDOS ===== */
+  --bg: #f8fafc;
+  --bg-alt: #f1f5f9;
+  --bg-dark: #0f172a;
+  --bg-darker: #0a0f1e;
+
+  /* ===== SUPERFICIES ===== */
+  --card: #ffffff;
+  --card-alt: #f8fafc;
+  --card-dark: #1e293b;
+  --card-dark-alt: #0f172a;
+
+  /* ===== TEXTO ===== */
+  --text: #0f172a;
+  --text-light: #64748b;
+  --text-lighter: #94a3b8;
+  --text-lightest: #cbd5e1;
+
+  --text-dark: #ffffff;
+  --text-dark-light: #e2e8f0;
+  --text-dark-lighter: #cbd5e1;
+
+  /* ===== BORDES ===== */
+  --border: #e2e8f0;
+  --border-dark: #334155;
+  --border-light: #f1f5f9;
+  --border-dark-light: #475569;
+
+  /* ===== SOMBRAS ===== */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ===== SOMBRAS OSCURAS ===== */
+  --shadow-dark-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-dark-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-dark-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-dark-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+
+  /* ===== RADIO ===== */
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ===== TRANSICIONES ===== */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ===== ESPACIADO ===== */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* ===== BREAKPOINTS ===== */
+  --bp-xs: 320px;
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+
+  /* ===== Z-INDEX ===== */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 900;
+  --z-modal: 1000;
+  --z-popover: 1100;
+  --z-tooltip: 1200;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --bg-alt: #1e293b;
+    --card: #1e293b;
+    --card-alt: #334155;
+    --text: #f1f5f9;
+    --text-light: #cbd5e1;
+    --text-lighter: #94a3b8;
+    --border: #334155;
+    --border-light: #0f172a;
+  }
+}

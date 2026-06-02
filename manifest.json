@@ -1,0 +1,102 @@
+{
+  "name": "Redinnova - Soluciones Tecnológicas Innovadoras",
+  "short_name": "Redinnova",
+  "description": "Plataforma SaaS de soluciones tecnológicas con gestión de productos, servicios y módulos empresariales",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#06b6d4",
+  "background_color": "#ffffff",
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%2306b6d4' width='512' height='512'/><text x='256' y='256' font-size='64' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>Redinnova</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2306b6d4' width='192' height='192'/><text x='96' y='96' font-size='32' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>R</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2306b6d4' width='192' height='192' rx='45'/><text x='96' y='96' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='bold'>R</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2306b6d4' width='192' height='192' rx='45'/><text x='96' y='96' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='bold'>R</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Productos",
+      "short_name": "Productos",
+      "description": "Ver catálogo de productos",
+      "url": "/index.html?tab=products",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%2306b6d4' width='96' height='96' rx='20'/><text x='48' y='48' font-size='50' fill='white' text-anchor='middle' dominant-baseline='middle'>📦</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Servicios",
+      "short_name": "Servicios",
+      "description": "Consultar servicios disponibles",
+      "url": "/index.html?tab=services",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%238b5cf6' width='96' height='96' rx='20'/><text x='48' y='48' font-size='50' fill='white' text-anchor='middle' dominant-baseline='middle'>🔧</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Contacto",
+      "short_name": "Contacto",
+      "description": "Ponerse en contacto",
+      "url": "/index.html?tab=contact",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%2322c55e' width='96' height='96' rx='20'/><text x='48' y='48' font-size='50' fill='white' text-anchor='middle' dominant-baseline='middle'>📞</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23f8fafc' width='540' height='720'/><rect fill='%2306b6d4' width='540' height='120'/><text x='270' y='60' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Inter' font-weight='bold'>Redinnova</text><rect y='140' width='540' height='200' fill='%23e2e8f0' opacity='0.5'/><rect y='360' width='540' height='360' fill='%23ffffff'/></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ]
+}
